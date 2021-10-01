@@ -41,8 +41,8 @@
             });
         </script>
         <title>Gosling.js Editor</title>
-      <script type="module" crossorigin src="/assets/index.184f191a.js"></script>
-    <link rel="modulepreload" href="/assets/vendor.c436a148.js">
+      <script type="module" crossorigin src="/assets/index.0eada2c9.js"></script>
+    <link rel="modulepreload" href="/assets/vendor.eb759024.js">
     <link rel="stylesheet" href="/assets/vendor.37fc0617.css">
     <link rel="stylesheet" href="/assets/index.63c1642f.css">
   </head>
@@ -52,12 +52,10 @@
         <div id="root"></div>
         <script src="https://bundle.run/buffer@6.0.3"></script>
         <script>
-          // Many dependencies reference `Buffer` or `global` without the use of an
+          // Many dependencies reference `Buffer` without the use of an
           // import. Since Vite relies on ESM, these references aren't resolved
           // and we get runtime errors. We could use something like `@rollup/plugin-inject`
           // but this breaks sourcemaps at the moment.
-
-          var global = globalThis;
           var Buffer = globalThis.buffer.Buffer; // referenced in many dependencies
         </script>
         
