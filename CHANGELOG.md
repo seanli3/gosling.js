@@ -1,4 +1,4 @@
-## [0.9.9](https://github.com/gosling-lang/gosling.js/compare/v0.9.8...v0.9.9) (2021-10-25)
+## [0.9.9](https://github.com/gosling-lang/gosling.js/compare/v0.9.8...v0.9.9) (2021-11-09)
 
 
 ### Bug Fixes
@@ -13,12 +13,14 @@
 
 * `unknown` assembly does not display `chrN:` on the genomic axis ([#532](https://github.com/gosling-lang/gosling.js/issues/532)) ([19ad4d4](https://github.com/gosling-lang/gosling.js/commit/19ad4d4d67b4306e3d52e8d76987d9ee17b5c842))
 * add `gosling.js/embed` package export ([#524](https://github.com/gosling-lang/gosling.js/issues/524)) ([0439755](https://github.com/gosling-lang/gosling.js/commit/0439755c1755bb9f9e412010ca557f4cab174494))
+* add available theme names to `theme.schema.json` ([#570](https://github.com/gosling-lang/gosling.js/issues/570)) ([5115859](https://github.com/gosling-lang/gosling.js/commit/5115859d1d46eaa0a0c278e11ef1baec51d27044))
 * allow access to HiGlass `ref` from JS API ([#558](https://github.com/gosling-lang/gosling.js/issues/558)) ([2f372ee](https://github.com/gosling-lang/gosling.js/commit/2f372ee41076598a4e245337ac31186bf5ebfc93))
 * **api:** support searching for a gene position ([#567](https://github.com/gosling-lang/gosling.js/issues/567)) ([05b82bd](https://github.com/gosling-lang/gosling.js/commit/05b82bd49670cccb212ec414ea89c52db72cd0ea))
 * built-in min and max columns for multivec and vector ([#519](https://github.com/gosling-lang/gosling.js/issues/519)) ([41e48d4](https://github.com/gosling-lang/gosling.js/commit/41e48d4313f843e308301596742db22343b448d0))
 * **editor:** add a small triangle at the right-end of dropdown menu for affordance ([#520](https://github.com/gosling-lang/gosling.js/issues/520)) ([7ed9a35](https://github.com/gosling-lang/gosling.js/commit/7ed9a3541d6f253cf8aec685329a8445f2b0231f))
 * **editor:** support using relative CSV file URLs for Gist specs ([#540](https://github.com/gosling-lang/gosling.js/issues/540)) ([af5f08e](https://github.com/gosling-lang/gosling.js/commit/af5f08e962d4aca0f1f8a34bd97973a4527644b9))
 * enable auto doc generate ([#503](https://github.com/gosling-lang/gosling.js/issues/503)) ([de231fe](https://github.com/gosling-lang/gosling.js/commit/de231fe1a7f4b87e3d9695acdef9ad873c23bdbd))
+* expose hgRef so that it can be accessed outside(#no-issue) ([2079fe7](https://github.com/gosling-lang/gosling.js/commit/2079fe72101cd84cd025fddad65b96627454f6ee))
 * migrate `uuid` &  `box-intersect` to browser-compatible deps ([#527](https://github.com/gosling-lang/gosling.js/issues/527)) ([d1fbbb3](https://github.com/gosling-lang/gosling.js/commit/d1fbbb3de0fea051f08f42623e1c956ae66bc330)), closes [#532](https://github.com/gosling-lang/gosling.js/issues/532)
 * more precise channel types (e.g., `X`, `Y`, and `Color` instead of `Channel`) ([#533](https://github.com/gosling-lang/gosling.js/issues/533)) ([aa2cd62](https://github.com/gosling-lang/gosling.js/commit/aa2cd626f0a43efc8e697cab271b29f02bb1b0c1))
 * remove aliases & update gmod deps ([#526](https://github.com/gosling-lang/gosling.js/issues/526)) ([6be5195](https://github.com/gosling-lang/gosling.js/commit/6be5195cd1551b53dc65d72aeb6b7b221c80c65e))

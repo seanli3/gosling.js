@@ -1,5 +1,5 @@
 {
-    "name": "gosling.js",
+    "name": "@panomics/gosling.js",
     "author": "Sehi L'Yi",
     "version": "0.9.9",
     "license": "MIT",
@@ -182,7 +182,7 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "yarn changelog && yarn schema && yarn schema-theme && yarn schema-template && yarn format && git add .",
+            "pre-commit": "yarn changelog && yarn schema && yarn schema-theme && yarn schema-template && git add .",
             "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
         }
     }
