@@ -93,7 +93,7 @@ export interface CommonViewDef {
     /**
      * Proportion of the radius of the center white space.
      *
-     * __Default:__ 0.3
+     * __Default:__ `0.3`
      * @Range [0, 1]
      */
     centerRadius?: number; // [0, 1] (default: 0.3)
@@ -166,9 +166,7 @@ export interface DataTrack extends CommonTrackDef {
 }
 
 /* ----------------------------- MARK ----------------------------- */
-export type Mark = MarkType | MarkDeep;
-
-export type MarkType =
+export type Mark =
     | 'point'
     | 'line'
     | 'area'
@@ -226,7 +224,6 @@ export interface Encoding {
     y1e?: Y | ChannelValue;
 
     row?: Row | ChannelValue;
-    column?: Column | ChannelValue;
 
     color?: Color | ChannelValue;
     size?: Size | ChannelValue;
@@ -275,7 +272,7 @@ export interface Style {
     /**
      * Whether to enable smooth paths when drawing curves.
      *
-     * __Default__: false
+     * __Default__: `false`
      */
     enableSmoothPath?: boolean;
 
@@ -347,7 +344,7 @@ export interface Style {
     textAnchor?: 'start' | 'middle' | 'end';
     /** Specify the connetion type of `betweenLink` marks.
      *
-     * __Default__: "corner"
+     * __Default__: `"corner"`
      */
     linkConnectionType?: 'straight' | 'curve' | 'corner';
 }
@@ -372,13 +369,13 @@ interface CommonVisibilityCondition {
     /**
      * Specify the buffer size (in pixel) of width or height when calculating the visibility.
      *
-     * __Default__: 0
+     * __Default__: `0`
      */
     conditionPadding?: number;
     /**
      * Specify the buffer size (in pixel) of width or height for smooth transition.
      *
-     * __Default__: 0
+     * __Default__: `0`
      */
     transitionPadding?: number;
 }
@@ -457,95 +454,103 @@ export type ChannelType = keyof typeof ChannelTypes | string;
 
 export type Channel = ChannelDeep | ChannelValue; // TODO: support null to allow removing spec when overriding
 
-export interface ChannelDeepCommon {
+export interface AxisCommon {
+    /** Name of the data field. */
     field?: string;
+    /** Specify the data type. */
+    type?: 'quantitative' | 'nominal' | 'genomic';
+    /** Values of the data */
+    domain?: ValueExtent | GenomicDomain;
+    /** Values of the visual channel. */
+    range?: ValueExtent;
+    /** Specify where should the axis be put  */
+    axis?: AxisPosition;
+    /** Whether to display legend. __Default__: `false` */
+    legend?: boolean;
+    /** Users need to assign a unique linkingId for [linking views](/docs/user-interaction#linking-views) and [Brushing and Linking](/docs/user-interaction#brushing-and-linking) */
+    linkingId?: string;
+    /** Specify how to aggregate data. __Default__: `undefined` */
+    aggregate?: Aggregate;
+    /** Whether to display grid. __Default__: `false` */
+    grid?: boolean;
 }
 
-export interface X extends ChannelDeepCommon {
+export interface X extends AxisCommon {
     type?: 'genomic';
     domain?: GenomicDomain;
-    range?: ValueExtent;
-    axis?: AxisPosition;
-    legend?: boolean;
-    grid?: boolean;
-    linkingId?: string;
-    aggregate?: Aggregate;
 }
 
-export interface Y extends ChannelDeepCommon {
+export interface Y extends AxisCommon {
     type?: 'quantitative' | 'nominal' | 'genomic';
     domain?: ValueExtent;
-    range?: ValueExtent;
-    axis?: AxisPosition;
-    legend?: boolean;
+    /** Custom baseline of the y-axis. __Default__: `0` */
     baseline?: string | number;
-    zeroBaseline?: boolean; // We could remove this and use the `baseline` option instead
-    mirrored?: boolean; // Show baseline on the top or right instead of bottom or left
-    aggregate?: Aggregate;
-    grid?: boolean;
-    linkingId?: string;
-    flip?: boolean; // Flip a track vertically or horizontally?
-    padding?: number; // Experimental: Used in `row` and `column` for vertical and horizontal padding.
+    /** Specify whether to use zero baseline. __Default__: `true`  */
+    zeroBaseline?: boolean; // TODO: We could remove this and use the `baseline` option instead
+    /** Whether to flip the y-axis. This is done by inverting the `range` property. __Default__: `false` */
+    flip?: boolean;
+}
+
+export interface ChannelDeepCommon {
+    /** Name of the data field */
+    field?: string;
+    /** Specify the data type */
+    type?: 'quantitative' | 'nominal' | 'genomic';
+    /** Values of the data */
+    domain?: ValueExtent;
+    /** Ranges of visual channel values */
+    range?: ValueExtent | Range;
 }
 
 export interface Row extends ChannelDeepCommon {
     type?: 'nominal';
     domain?: ValueExtent;
+    /** Determine the start and end position of rendering area of this track along vertical axis. __Default__: `[0, height]` */
     range?: ValueExtent;
+    /** Whether to display legend. __Default__: `false` */
     legend?: boolean;
-    padding?: number; // Experimental: Used in `row` and `column` for vertical and horizontal padding.
+    /** Determines the size of inner white spaces on the top and bottom of individiual rows. __Default__: `0` */
+    padding?: number;
+    /** Whether to display grid. __Default__: `false` */
     grid?: boolean;
-}
-
-export interface Column extends ChannelDeepCommon {
-    type?: 'nominal';
-    domain?: ValueExtent;
-    range?: ValueExtent;
 }
 
 export interface Color extends ChannelDeepCommon {
     type?: 'quantitative' | 'nominal';
     domain?: ValueExtent;
+    /** Determine the colors that should be bound to data value. Default properties are determined considering the field type. */
     range?: Range;
+    /** Whether to display legend. __Default__: `false` */
     legend?: boolean;
-    baseline?: string | number;
-    zeroBaseline?: boolean; // We could remove this and use the `baseline` option instead
 }
 
 export interface Size extends ChannelDeepCommon {
     type?: 'quantitative' | 'nominal';
     domain?: ValueExtent;
     range?: ValueExtent;
-    legend?: boolean; // TODO: Support this
-    baseline?: string | number;
-    zeroBaseline?: boolean; // We could remove this and use the `baseline` option instead
+    /** not supported: Whether to display legend. __Default__: `false` */
+    legend?: boolean;
 }
 
 export interface Stroke extends ChannelDeepCommon {
     type?: 'quantitative' | 'nominal';
     domain?: ValueExtent;
     range?: Range;
-    baseline?: string | number;
-    zeroBaseline?: boolean; // We could remove this and use the `baseline` option instead
 }
 
 export interface StrokeWidth extends ChannelDeepCommon {
     type?: 'quantitative' | 'nominal';
     domain?: ValueExtent;
     range?: ValueExtent;
-    baseline?: string | number;
-    zeroBaseline?: boolean; // We could remove this and use the `baseline` option instead
 }
 
 export interface Opacity extends ChannelDeepCommon {
     type?: 'quantitative' | 'nominal';
     domain?: ValueExtent;
     range?: ValueExtent;
-    baseline?: string | number;
-    zeroBaseline?: boolean; // We could remove this and use the `baseline` option instead
 }
 
-export interface Text extends ChannelDeepCommon {
+export interface Text extends Omit<ChannelDeepCommon, 'baseline'> {
     type?: 'quantitative' | 'nominal';
     domain?: string[];
     range?: string[];
@@ -554,6 +559,7 @@ export interface Text extends ChannelDeepCommon {
 export type ChannelDeep = X | Y | Row | Color | Size | Stroke | StrokeWidth | Opacity | Text;
 
 export interface ChannelValue {
+    /** Assign a constant value for a visual channel. */
     value: number | string;
 }
 
@@ -570,7 +576,7 @@ export interface DomainChr {
     chromosome: Chromosome;
 }
 export interface DomainChrInterval {
-    // For showing a certain interval in a chromosome
+    /** If specified, only showing a certain interval in a chromosome. */
     chromosome: Chromosome;
     interval: [number, number];
 }
@@ -618,7 +624,7 @@ export interface JSONData {
 
     /** Specify the number of rows loaded from the URL.
      *
-     * __Default:__ 1000
+     * __Default:__ `1000`
      */
     sampleLength?: number;
 
@@ -869,7 +875,7 @@ interface CommonFilterTransform {
     /**
      * when `{"not": true}`, apply a NOT logical operation to the filter.
      *
-     * __Default:__ false */
+     * __Default:__ `false` */
     not?: boolean;
 }
 
@@ -1066,7 +1072,6 @@ export type TemplateTrackMappingDef = Omit<
     y1e?: ChannelWithBase;
 
     row?: ChannelWithBase;
-    column?: ChannelWithBase;
 
     color?: ChannelWithBase;
     size?: ChannelWithBase;
@@ -1093,71 +1098,3 @@ export type TemplateTrackMappingDef = Omit<
 export type ChannelWithBase = Channel & {
     base?: string;
 };
-
-/* ----------------------- Below is deprecated ----------------------- */
-export type MarkDeep = MarkGlyphPreset | MarkGlyph;
-
-export interface MarkGlyphPreset {
-    type: string; //GLYPH_LOCAL_PRESET_TYPE | GLYPH_HIGLASS_PRESET_TYPE;
-    server: string; // TODO: Not supported yet
-}
-
-export interface MarkGlyph {
-    type: 'compositeMark';
-    name: string;
-    referenceColumn?: string; // reference column for selecting data tuples for each glyph
-    requiredChannels: ChannelType[]; // channels that must be assigned // TODO: What about optional channels?
-    elements: GlyphElement[];
-}
-
-export interface GlyphElement {
-    // primitives
-    description?: string;
-    select?: { channel: ChannelType; oneOf: string[] }[];
-    mark: MarkType | MarkBind;
-    // coordinates
-    x?: ChannelBind | ChannelValue | 'none';
-    y?: ChannelBind | ChannelValue | 'none';
-    xe?: ChannelBind | ChannelValue | 'none';
-    ye?: ChannelBind | ChannelValue | 'none';
-    // coordinates for link
-    x1?: ChannelBind | ChannelValue | 'none';
-    y1?: ChannelBind | ChannelValue | 'none';
-    x1e?: ChannelBind | ChannelValue | 'none';
-    y1e?: ChannelBind | ChannelValue | 'none';
-    // others
-    stroke?: ChannelBind | ChannelValue | 'none';
-    strokeWidth?: ChannelBind | ChannelValue | 'none';
-    row?: ChannelBind | ChannelValue | 'none';
-    color?: ChannelBind | ChannelValue | 'none';
-    size?: ChannelBind | ChannelValue | 'none';
-    w?: ChannelBind | ChannelValue | 'none';
-    opacity?: ChannelBind | ChannelValue | 'none';
-    text?: ChannelBind | ChannelValue | 'none';
-    background?: ChannelBind | ChannelValue | 'none';
-    style?: MarkStyleInGlyph;
-}
-
-export interface MarkStyleInGlyph {
-    dashed?: string;
-    dy?: number;
-    stroke?: string;
-    strokeWidth?: number;
-    background?: string;
-}
-
-export interface MarkBind {
-    bind: string;
-    domain: string[];
-    range: MarkType[];
-}
-
-export interface ChannelBind {
-    bind: ChannelType;
-    aggregate?: Aggregate;
-}
-
-export interface AnyGlyphChannels {
-    // Allow defining any kinds of chennels for binding data in Glyph
-    [key: string]: ChannelBind | ChannelValue;
-}

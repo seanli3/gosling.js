@@ -13,16 +13,16 @@ import SplitPane from 'react-split-pane';
 import ErrorBoundary from './error-boundary';
 import { debounce, isEqual } from 'lodash-es';
 import { examples } from './example';
+import { traverseTracksAndViews } from '../src/core/utils/spec-preprocess';
 import stripJsonComments from 'strip-json-comments';
 import * as qs from 'qs';
 import JSONCrush from 'jsoncrush';
 import './editor.css';
 import { ICONS, ICON_INFO } from './icon';
-// @ts-ignore
-import { Themes } from 'gosling-theme';
-
 import type { HiGlassSpec } from '@higlass.schema';
 import type { Datum } from '@gosling.schema';
+// @ts-ignore
+import { Themes } from 'gosling-theme';
 
 const INIT_DEMO_INDEX = examples.findIndex(d => d.forceShow) !== -1 ? examples.findIndex(d => d.forceShow) : 0;
 
@@ -86,6 +86,23 @@ const emptySpec = (message?: string) => (message !== undefined ? `{\n\t// ${mess
 
 const getDescPanelDefultWidth = () => Math.min(500, window.innerWidth);
 
+/**
+ * Convert relative CSV data URLs to absolute URLs.
+ * (e.g., './example.csv' => 'https://gist.githubusercontent.com/{urlGist}/raw/example.csv')
+ */
+function resolveRelativeCsvUrls(spec: string, importMeta: URL) {
+    const newSpec = JSON.parse(spec);
+    // https://regex101.com/r/l87Q5q/1
+    // eslint-disable-next-line
+    const relativePathRegex = /^[.\/]|^\.[.\/]|^\.\.[^\/]/;
+    traverseTracksAndViews(newSpec as gosling.GoslingSpec, (tv: any) => {
+        if (tv.data && tv.data.type === 'csv' && relativePathRegex.test(tv.data.url)) {
+            tv.data.url = new URL(tv.data.url, importMeta).href;
+        }
+    });
+    return stringify(newSpec);
+}
+
 const fetchSpecFromGist = async (gist: string) => {
     let metadata: any = null;
     try {
@@ -104,8 +121,9 @@ const fetchSpecFromGist = async (gist: string) => {
 
     if (!dataFile) return Promise.reject(new Error('Gist does not contain a Gosling spec.'));
 
-    const whenCode = fetch(`https://gist.githubusercontent.com/${gist}/raw/${dataFile}`).then(response =>
-        response.status === 200 ? response.text() : null
+    const specUrl = new URL(`https://gist.githubusercontent.com/${gist}/raw/${dataFile}`);
+    const whenCode = fetch(specUrl.href).then(async response =>
+        response.status === 200 ? resolveRelativeCsvUrls(await response.text(), specUrl) : null
     );
 
     const whenText = fetch(`https://gist.githubusercontent.com/${gist}/raw/${textFile}`).then(response =>
@@ -148,7 +166,7 @@ function Editor(props: any) {
     const [refreshData, setRefreshData] = useState<boolean>(false);
 
     const [demo, setDemo] = useState(examples[urlExampleIndex === -1 ? INIT_DEMO_INDEX : urlExampleIndex]);
-    const [theme, setTheme] = useState('light');
+    const [theme, setTheme] = useState<gosling.Theme>('light');
     const [hg, setHg] = useState<HiGlassSpec>();
     const [code, setCode] = useState(defaultCode);
     const [goslingSpec, setGoslingSpec] = useState<gosling.GoslingSpec>();
@@ -463,10 +481,10 @@ function Editor(props: any) {
                         style={{ maxWidth: IS_SMALL_SCREEN ? window.innerWidth - 180 : 'none' }}
                         onChange={e => {
                             if (Object.keys(Themes).indexOf(e.target.value) !== -1) {
-                                setTheme(e.target.value);
+                                setTheme(e.target.value as any);
                             }
                         }}
-                        defaultValue={theme}
+                        defaultValue={theme as any}
                     >
                         {Object.keys(Themes).map((d: string) => (
                             <option key={d} value={d}>
