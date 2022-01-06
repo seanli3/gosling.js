@@ -930,6 +930,8 @@ function GoslingTrack(HGC: any, ...args: any[]): any {
 
             if (Math.sqrt((this.mouseDownX - mouseX) ** 2 + (this.mouseDownY - mouseY) ** 2) > 1) {
                 // Move distance is relatively long, so this might be a drag
+                // This listener is used in app/src/editor/editor.tsx
+                window.dispatchEvent(new CustomEvent('goslingDrag'));
                 return;
             }
 
