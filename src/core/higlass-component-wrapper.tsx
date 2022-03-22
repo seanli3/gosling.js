@@ -99,7 +99,8 @@ export const HiGlassComponentWrapper = forwardRef<HiGlassApi | undefined, HiGlas
                             height: props.size.height
                         }}
                         // onClick={(e) => {
-                        //     PubSub.publish('gosling.click', {
+                        //     const eventNamespace = this.options.spec.eventNamespace;
+                        //     PubSub.publish(eventNamespace ? `gosling.click.${eventNamespace}` : 'gosling.click', {
                         //         mouseX: e.pageX - (document.getElementById('higlass-wrapper')?.offsetLeft ?? 0),
                         //         mouseY: e.pageY - (document.getElementById('higlass-wrapper')?.offsetTop ?? 0)
                         //     });

@@ -7,12 +7,14 @@ export type RootSpecWithSingleView = SingleView & {
     title?: string;
     subtitle?: string;
     description?: string;
+    eventNamespace?: string;
 };
 
 export interface RootSpecWithMultipleViews extends MultipleViews {
     title?: string;
     subtitle?: string;
     description?: string;
+    eventNamespace?: string;
 }
 
 /* ----------------------------- VIEW ----------------------------- */
