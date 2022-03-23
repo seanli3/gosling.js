@@ -20,6 +20,7 @@ interface GoslingCompProps {
     experimental?: {
         reactive?: boolean;
     };
+    eventNamespace?: string;
 }
 
 export const GoslingComponent = forwardRef<
@@ -37,7 +38,7 @@ export const GoslingComponent = forwardRef<
     // Gosling APIs
     useEffect(() => {
         if (!ref) return;
-        const api = createApi(hgRef, viewConfig, theme);
+        const api = createApi(hgRef, viewConfig, theme, props.eventNamespace);
         if (typeof ref == 'function') {
             ref({ hgRef, api });
         } else {

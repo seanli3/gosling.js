@@ -40,8 +40,9 @@ interface geneSuggestion {
 export interface GoslingApi {
     subscribe<EventName extends keyof EventMap>(
         type: EventName,
-        callback: (message: string, payload: EventMap[EventName]) => void
-    ): void;
+        callback: (message: string, payload: EventMap[EventName]) => void,
+        global?: boolean
+    ): string;
     unsubscribe(tokenOrFunction: string | ((...args: unknown[]) => unknown)): void;
     zoomTo(viewId: string, position: string, padding?: number, duration?: number): void;
     zoomToExtent(viewId: string, duration?: number): void;
@@ -61,7 +62,8 @@ export interface GoslingApi {
 export function createApi(
     hgRef: React.RefObject<HiGlassApi | undefined> | HiGlassApi,
     hgSpec: HiGlassSpec | undefined,
-    theme: Required<CompleteThemeDeep>
+    theme: Required<CompleteThemeDeep>,
+    eventNamespace? : string
 ): GoslingApi {
     const getHg = () => {
         // Safely get higlass API
@@ -106,17 +108,21 @@ export function createApi(
         };
     };
     return {
-        subscribe: (type, callback) => {
+        subscribe: (type, callback, global=false) => {
+            let eventName;
+            if(!global) {
+                eventName = eventNamespace ? `${type}.${eventNamespace}` : type;
+            } else {
+                eventName = type;
+            }
             switch (type) {
                 case 'mouseover':
-                    return PubSub.subscribe(type, callback);
                 case 'click':
-                    return PubSub.subscribe(type, callback);
                 case 'goslingDrag':
-                    return PubSub.subscribe(type, callback);
+                    return PubSub.subscribe(eventName, callback);
                 default: {
                     console.error(`Event type not recognized, got ${JSON.stringify(type)}.`);
-                    return undefined;
+                    return '';
                 }
             }
         },

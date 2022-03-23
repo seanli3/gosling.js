@@ -850,7 +850,8 @@ function GoslingTrack(HGC: any, ...args: any[]): any {
                     if (PubSub) {
                         const NUM_OF_ROWS_IN_PREVIEW = 100;
                         const numOrRows = tile.gos.tabularDataFiltered.length;
-                        PubSub.publish('data-preview', {
+                        const eventNamespace = this.options.spec.eventNamespace;
+                        PubSub.publish(eventNamespace ? `data-preview.${eventNamespace}` : 'data-preview', {
                             id: this.context.id,
                             dataConfig: JSON.stringify({ data: resolved.data }),
                             data:
@@ -931,7 +932,8 @@ function GoslingTrack(HGC: any, ...args: any[]): any {
             if (Math.sqrt((this.mouseDownX - mouseX) ** 2 + (this.mouseDownY - mouseY) ** 2) > 1) {
                 // Move distance is relatively long, so this might be a drag
                 // This listener is used in app/src/editor/editor.tsx
-                PubSub.publish('goslingDrag');
+                const eventNamespace = this.options.spec.eventNamespace;
+                PubSub.publish(eventNamespace ? `goslingDrag.${eventNamespace}` : 'goslingDrag');
                 return;
             }
 
@@ -940,7 +942,8 @@ function GoslingTrack(HGC: any, ...args: any[]): any {
             );
 
             if (tooltip) {
-                PubSub.publish('click', {
+                const eventNamespace = this.options.spec.eventNamespace;
+                PubSub.publish(eventNamespace ? `click.${eventNamespace}` : 'click', {
                     data: { ...tooltip.datum },
                     genomicPosition: getRelativeGenomicPosition(Math.floor(this._xScale.invert(mouseX)))
                 });
@@ -974,7 +977,8 @@ function GoslingTrack(HGC: any, ...args: any[]): any {
             }
 
             if (tooltip) {
-                PubSub.publish('mouseover', {
+                const eventNamespace = this.options.spec.eventNamespace;
+                PubSub.publish(eventNamespace ? `mouseover.${eventNamespace}` : 'mouseover', {
                     data: { ...tooltip.datum },
                     genomicPosition: getRelativeGenomicPosition(Math.floor(this._xScale.invert(mouseX)))
                 });
