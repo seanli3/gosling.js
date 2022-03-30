@@ -253,7 +253,8 @@ function CSVDataFetcher(HGC: any, ...args: any): any {
                 // filter the data so that only the visible data is sent to tracks
                 let tabularData = this.values.filter((d: any) => {
                     if (this.dataConfig.genomicFields) {
-                        return this.dataConfig.genomicFields.find((g: any) => minX < d[g] && d[g] <= maxX);
+                        // Show only data that is within the viewing range or where the dataview is zoomed into the current field
+                        return this.dataConfig.genomicFields.find((g: any) => (minX < d[g] && d['s1'] <= maxX) || (minX > d['s1'] && d['e1'] >= maxX));
                     } else {
                         const allGenomicFields: string[] = [];
                         this.dataConfig.genomicFieldsToConvert.forEach((d: any) =>
