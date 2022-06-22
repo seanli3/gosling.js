@@ -255,7 +255,7 @@ function CSVDataFetcher(HGC: any, ...args: any): any {
                     if (this.dataConfig.genomicFields) {
                         // If there are just two genomic fields, then this finds the two identifies for them and prevents filtering of data
                         // when the zoom is inside the currently vieable genomic zone
-                        if (this.dataConfig.genomicFields.length = this.values.length > 1) {
+                        if (this.dataConfig.genomicFields.length === 2 && this.values.length > 1) {
                             const firstIdentifier = this.dataConfig.genomicFields[0];
                             const secondIdentifier = this.dataConfig.genomicFields[1];
                             const lowerBoundIdentifier = this.values[this.values.length - 1][firstIdentifier] < this.values[this.values.length - 1][secondIdentifier] ?
